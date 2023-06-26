@@ -40,6 +40,7 @@ import com.example.cloudshoplist.View.TopBox_ID_Spesa
 import com.example.cloudshoplist.View.WindowCenterOffsetPositionProvider
 import com.example.cloudshoplist.View.getRandomString
 import com.example.cloudshoplist.ViewModel.MainViewModel
+import com.example.cloudshoplist.repository.SharedPreferencesUtils.SharedPreferenceStringLiveData
 import com.example.cloudshoplist.ui.theme.CloudShoplistTheme
 import kotlinx.coroutines.launch
 
@@ -48,15 +49,13 @@ class MainActivity : ComponentActivity() {
     private  val TAG = "MainActivity"
 
     lateinit var ViewModel: MainViewModel
+    lateinit var sharedPref: SharedPreferenceStringLiveData
     val context = this
 
     val Context.dataStore : DataStore<Preferences> by preferencesDataStore(
         name = "shoplist_id"
 
     )
-
-
-
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,28 +67,15 @@ class MainActivity : ComponentActivity() {
             val factory = ShoplistIdViewModelFactory(shopListIdsRepository)
             ViewModel = ViewModelProvider(this,factory).get(MainViewModel::class.java)
 
-
-            var spesaID = ""
+            var spesaID = ViewModel.shoplist_ID
             var showDialog = remember { mutableStateOf(false) }
             val scope = rememberCoroutineScope()
             val lazyListState = rememberLazyListState()
             val todoListState = ViewModel.shopListFlow.collectAsState()
 
+            val state = ViewModel.viewState.collectAsState().value
+            Log.d(TAG, "onCreate: state? "+state)
 
-
-            Log.d(TAG, "onCreate: 4")
-            //var  numberOfIds = ViewModel.numberOfIds()
-            ViewModel.allIdItems().observe(this, Observer {
-                if (it.isEmpty()) {
-                    spesaID = (getRandomString(10))
-                    Log.d(TAG, "onCreate: id retrieved from database: 1: " +spesaID)
-                    ViewModel.insert(IdItem(spesaID))
-
-                }else{
-                    spesaID= it.get(0).spesa_id.toString()
-                    Log.d(TAG, "onCreate: id retrieved from database: 2: " +spesaID)
-                }
-            })
 
             // VIEW
             CloudShoplistTheme() {
@@ -113,7 +99,7 @@ class MainActivity : ComponentActivity() {
                             //MainView(viewModel, context)
                             Column() {
 
-                                TopBox_ID_Spesa(spesaID)
+                                TopBox_ID_Spesa(state)
                                 SpesaList(ViewModel)
 
                                 //popup per inserire nuovo item
@@ -133,17 +119,11 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         }
-
                     }
-
                 )
             }
-
-
         }
     }
-
-
 }
 
 

@@ -55,10 +55,6 @@ fun TopBox_ID_Spesa(spesa_ID: String) {
         Font(R.font.robotobold, FontWeight.Bold),
     )
 
-    //se non è presente nessun ID nel sharedPreferences, generane uno nuovo
-
-    //Toast.makeText(context, "Db Inserted", Toast.LENGTH_LONG).show()
-
     if (showDialog.value)
         AlertDialog(
             onDismissRequest = { showDialog.value = false },
@@ -72,7 +68,6 @@ fun TopBox_ID_Spesa(spesa_ID: String) {
                     )
                 }
             },
-
 
             //on confirm, se il textbox non è vuoto, compialo nella casella
             confirmButton = {
