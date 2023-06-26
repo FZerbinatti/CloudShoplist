@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">CloudShoplist</string>
+    <string name="ALERT_PASTE_ID_SPESA">"Incolla qui l'ID spesa"</string>
+    <string name="EMPTY_ID">ID vuoto</string>
+    <string name="CANCEL">Annulla</string>
+    <string name="ID_SHOPLIST">ID Spesa:</string>
+    <string name="text_copied_to_clipboard">ID copiato correttamente</string>
+    <string name="CONFIRM">Conferma</string>
+    <string name="preference_file_key">preference_file_key</string>
+
+
+</resources>
