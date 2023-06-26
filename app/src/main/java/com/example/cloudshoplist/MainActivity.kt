@@ -29,13 +29,16 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.dreamsphere.CloudShoplist.R
 import com.dreamsphere.sharedshoplistk.repository.Room.IdDatabase
 import com.dreamsphere.sharedshoplistk.repository.Room.IdItem
 import com.dreamsphere.sharedshoplistk.repository.Room.IdRepository
 import com.example.cloudshoplist.View.PersonalizedAlertDialog
 import com.example.cloudshoplist.View.ShoplistIdViewModelFactory
 import com.example.cloudshoplist.View.SpesaList
+import com.example.cloudshoplist.View.TopBox_ID_Spesa
 import com.example.cloudshoplist.View.WindowCenterOffsetPositionProvider
+import com.example.cloudshoplist.View.getRandomString
 import com.example.cloudshoplist.ViewModel.MainViewModel
 import com.example.cloudshoplist.ui.theme.CloudShoplistTheme
 import kotlinx.coroutines.launch

@@ -8,13 +8,13 @@ import androidx.room.PrimaryKey
 
 data class IdItem(
 
-
+    var spesa_id: String,
 
     @ColumnInfo(name = "id_shoplist")
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
 
-    var spesa_id: String,
+
 
 ){
 

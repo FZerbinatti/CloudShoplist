@@ -42,7 +42,7 @@ class MainViewModel(private val repository: IdRepository) : ViewModel() {
 
     val shopListFlow: StateFlow<List<ShopListItem>> get() = _shopListFlow
 
-    fun setUrgent(index: Int, value: Boolean) {
+    fun setChecked(index: Int, value: Boolean) {
         shopList[index] = shopList[index].copy(item_checked = value)
     }
 
@@ -81,7 +81,7 @@ class MainViewModel(private val repository: IdRepository) : ViewModel() {
     fun allIdItems() = repository.allIdItems()
 
     //Number of Ids in the database
-    fun numberOfIds() = repository.numberOfIds()
+
 
     //suspend fun getIdFromRoom(): String = repository.getAnId()
 
