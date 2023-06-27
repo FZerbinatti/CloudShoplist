@@ -83,6 +83,8 @@ fun SpesaList(viewModel: MainViewModel) {
                                 viewModel.addRecord(currentItem.item_name, true)
 
                                 viewModel.removeRecord(currentItem)
+
+
                                 true
 
                             } else {
