@@ -24,21 +24,4 @@ interface ShoplistIdDao{
     @Query("SELECT COUNT(*) FROM table_shiplist_id")
     suspend fun countAllIds(): Int
 
-/*    @Query("SELECT * FROM table_shiplist_id LIMIT 1")
-    fun retrieveFirstID(): MutableLiveData<IdItem>*/
-
-/*    suspend fun getAnId(): String {
-        var spesaID =""
-
-
-        val empty = countAllIds()
-        if (empty.equals(0)){
-            spesaID = (getRandomString(10))
-            insert(IdItem(spesaID))
-            return spesaID
-        }else
-            return getAllIds().value.toString()
-    }*/
-
-
 }

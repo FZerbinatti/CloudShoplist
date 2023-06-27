@@ -99,7 +99,7 @@ class MainActivity : ComponentActivity() {
                             //MainView(viewModel, context)
                             Column() {
 
-                                TopBox_ID_Spesa(state)
+                                TopBox_ID_Spesa(ViewModel)
                                 SpesaList(ViewModel)
 
                                 //popup per inserire nuovo item

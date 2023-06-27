@@ -35,11 +35,17 @@ class MainViewModel(private val repository: IdRepository) : ViewModel() {
             if (idSize==0){
                 shoplist_ID = getRandomString(10)
                 _viewState.value = shoplist_ID
-                insert(IdItem(shoplist_ID,0))
+                insert(IdItem(shoplist_ID))
 
             }else{
-                Log.d(TAG, "it? : "+ it.get(0).spesa_id)
-                _viewState.value = it.get(0).spesa_id
+                //se il numero di item è 2, cancella il [0]
+                Log.d(TAG, "it? : "+ it.get(idSize!!-1).spesa_id)
+                _viewState.value = it.get(idSize!!-1).spesa_id
+                if (idSize!!>1){
+                    for (i in 0..idSize!!-2){
+                        delete(it.get(i))
+                    }
+                }
             }
         })
     }
@@ -72,6 +78,7 @@ class MainViewModel(private val repository: IdRepository) : ViewModel() {
         shopList.remove(shopList[index])
     }
     fun insert(item: IdItem) = GlobalScope.launch {
+        Log.d(TAG, "insert: id: "+item.id+ " code: "+item.spesa_id)
         repository.insert(item)
     }
     fun delete(item: IdItem) = GlobalScope.launch {

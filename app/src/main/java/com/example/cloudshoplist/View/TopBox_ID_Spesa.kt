@@ -22,6 +22,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -38,16 +39,20 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import com.dreamsphere.CloudShoplist.R
+import com.dreamsphere.sharedshoplistk.repository.Room.IdItem
+import com.example.cloudshoplist.ViewModel.MainViewModel
 
 @Composable
-fun TopBox_ID_Spesa(spesa_ID: String) {
+fun TopBox_ID_Spesa(viewModel: MainViewModel) {
 
     val context = LocalContext.current
 
     //questa variabile quando diventa vera triggera l'AlertDialog
     var showDialog = remember { mutableStateOf(false) }
     var alertPastedIdSpesa = remember { mutableStateOf("") }
+    val state = viewModel.viewState.collectAsState().value
 
     val robotoFont = FontFamily(
         Font(R.font.robotthin, FontWeight.Thin),
@@ -75,7 +80,7 @@ fun TopBox_ID_Spesa(spesa_ID: String) {
 
                     if (!alertPastedIdSpesa.value.isEmpty()) {
                         var spesa_ID = alertPastedIdSpesa.value
-
+                        viewModel.insert(IdItem(spesa_ID,0))
                         showDialog.value = false
 
 
@@ -145,7 +150,7 @@ fun TopBox_ID_Spesa(spesa_ID: String) {
                         ) {
 
                         ClickableText(
-                            AnnotatedString(spesa_ID),
+                            AnnotatedString(state),
                             onClick = {
                                 showDialog.value = true
 
@@ -165,7 +170,7 @@ fun TopBox_ID_Spesa(spesa_ID: String) {
 
                                 val clipboardManager =
                                     context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                                val clipData = ClipData.newPlainText("ID_Spesa", spesa_ID)
+                                val clipData = ClipData.newPlainText("ID_Spesa", state)
                                 clipboardManager.setPrimaryClip(clipData)
                                 Toast.makeText(
                                     context,
