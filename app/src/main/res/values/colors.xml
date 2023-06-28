@@ -15,6 +15,7 @@
 
     <color name="swipe_bacgkorund_yellow">#5EFFF48F</color>
     <color name="swipe_bacgkorund_red">#36FF0000</color>
+    <color name="swipe_bacgkorund_trasp">#00FFFFFF</color>
 
     <color name="texts_color">#D84A4A4A</color>
 </resources>

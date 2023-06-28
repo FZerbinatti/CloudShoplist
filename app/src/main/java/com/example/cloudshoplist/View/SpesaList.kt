@@ -1,5 +1,6 @@
 package com.example.cloudshoplist.View
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.animation.core.animateFloatAsState
 
@@ -37,6 +38,7 @@ import com.example.cloudshoplist.ViewModel.MainViewModel
 fun SpesaList(viewModel: MainViewModel) {
 
 
+
     val shopListState = viewModel.shopListFlow.collectAsState()
     val lazyListState = rememberLazyListState()
     val scope = rememberCoroutineScope()
@@ -68,25 +70,24 @@ fun SpesaList(viewModel: MainViewModel) {
 
             items(
                 items = shopListState.value,
-                key = { shopItem -> shopItem.id },
+                key = { shopItem -> shopItem.item_name },
                 itemContent = { item ->
                     val currentItem by rememberUpdatedState(item)
                     val dismissState = rememberDismissState(
                         confirmStateChange = {
 
                             if (it == DismissValue.DismissedToStart) {
+                                Log.d("Main ", "SpesaList:  DismissValue.DismissedToStart")
                                 viewModel.removeRecord(currentItem)
                                 true
 
                             } else if (it == DismissValue.DismissedToEnd) {
                                 //rimuovi item ma mettilo in coda come checked
-                                viewModel.addRecord(currentItem.item_name, true)
-
-                                viewModel.removeRecord(currentItem)
-
-
+                                Log.d("Main ", "SpesaList:  DismissValue.DismissedToEnd")
+                                //viewModel.addRecord(currentItem.item_name, true)
+                                viewModel.setChecked(shopListState.value.indexOf(currentItem), true)
+                                //viewModel.removeRecord(currentItem)
                                 true
-
                             } else {
                                 false
                             }
@@ -94,19 +95,23 @@ fun SpesaList(viewModel: MainViewModel) {
                     )
 
                     if (dismissState.isDismissed(DismissDirection.EndToStart)) {
+                        Log.d("Main ", "SpesaList: DismissDirection.EndToStart")
+
                         viewModel.removeRecord(item)
                     } else if (dismissState.isDismissed(DismissDirection.StartToEnd)) {
                         //rimuovi item ma mettilo in coda come checked
+                        Log.d("Main ", "SpesaList: DismissDirection.StartToEnd")
                         viewModel.addRecord(currentItem.item_name, true)
-
+                        //viewModel.setChecked(shopListState.value.indexOf(currentItem), true)
                         viewModel.removeRecord(item)
+
                     }
 
                     SwipeToDismiss(
                         state = dismissState,
                         modifier = Modifier
-                            .padding(vertical = 1.dp),
-                            //.animateItemPlacement(),
+                            .padding(vertical = 1.dp)
+                            .animateItemPlacement(),
                         directions = setOf(
                             DismissDirection.StartToEnd,
                             DismissDirection.EndToStart
@@ -116,7 +121,6 @@ fun SpesaList(viewModel: MainViewModel) {
                                 if (direction == DismissDirection.StartToEnd) 0.15f else 0.15f
                             )
                         },
-
                         background = {
                             SwipeBackground(dismissState)
                         },
@@ -124,7 +128,7 @@ fun SpesaList(viewModel: MainViewModel) {
                             ShopListItemRow(item, shopListState, viewModel)
                         }
                     )
-                    //SetData(viewModel)
+
 
                 }
 

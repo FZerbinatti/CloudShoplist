@@ -43,6 +43,7 @@ class MainViewModel(private val repository: IdRepository) : ViewModel() {
             }else{
                 //se il numero di item è 2, cancella il [0]
                 Log.d(TAG, "it? : "+ it.get(idSize!!-1).spesa_id)
+                if (_viewState.value.equals("a1a2a3")){}
                 _viewState.value = it.get(idSize!!-1).spesa_id
                 getShopListFromFirebase()
                 if (idSize!!>1){
@@ -62,17 +63,17 @@ class MainViewModel(private val repository: IdRepository) : ViewModel() {
         Log.d(TAG, "getShopListFromFirebase: if a1a2a3 ur fucked: "+_viewState.value)
         Log.d(TAG, "getShopListFromFirebase: size: "+shopList.size)
         val database = com.google.firebase.ktx.Firebase.database("https://sharedshoplist-17901-default-rtdb.europe-west1.firebasedatabase.app/")
-        var index=0
+        //var index=0
         val firebase_shoplists_ids = database.getReference("shoplists_ids").child(_viewState.value)
         firebase_shoplists_ids.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 shopList.clear()
                 for (DataSnap in snapshot.children) {
-                    index++
+                    //index++
                     val item = DataSnap.getValue(ShopListItem::class.java)
                     if (item != null) {
                         Log.d(TAG, "onDataChange: item: " + item.item_name)
-                        shopList.add(ShopListItem(index, item.item_name, item.item_checked))
+                        shopList.add(ShopListItem(item.item_name, item.item_checked))
 
                     }
                 }
@@ -95,28 +96,35 @@ class MainViewModel(private val repository: IdRepository) : ViewModel() {
         val firebase = Firebase(_viewState.value)
         firebase.checkItemFirebase(shopList[index])
 
-        shopList.add(ShopListItem(shopList.last().id + 1, shopList[index].item_name.capitalize(), value))
-        shopList.remove(shopList[index])
+        shopList.sortBy { it.item_checked }
+        //shopList.add(ShopListItem(shopList[index].item_name.capitalize(), value))
+        //shopList.remove(shopList[index])
 
 
 
 
     }
+
+
     public fun addRecord(titleText: String, checked: Boolean) {
+        Log.d(TAG, "addRecord: "+titleText)
         val firebase = Firebase(_viewState.value)
-        if (shopList.isEmpty()) {
+        firebase.addValueFirebase(ShopListItem(titleText.capitalize(), checked))
+
+        /*if (shopList.isEmpty()) {
             //shopList.add(ShopListItem(1, titleText.capitalize(), checked))
-            firebase.addValueFirebase(ShopListItem(1, titleText.capitalize(), checked))
+            firebase.addValueFirebase(ShopListItem(titleText.capitalize(), checked))
         } else {
             //shopList.add(ShopListItem(shopList.last().id + 1, titleText.capitalize(), checked))
-            firebase.addValueFirebase(ShopListItem(shopList.last().id + 1, titleText.capitalize(), checked))
-        }
+            firebase.addValueFirebase(ShopListItem(titleText.capitalize(), checked))
+        }*/
         // add record on firebase
         //firebase_shoplists_ids.
     }
     fun removeRecord(item: ShopListItem) {
-        val index = shopList.indexOf(item)
-        shopList.remove(shopList[index])
+        Log.d(TAG, "removeRecord: "+item.item_name)
+        //val index = shopList.indexOf(item)
+        //shopList.remove(shopList[index])
         // delete on firebase
         val firebase = Firebase(_viewState.value)
         firebase.deleteFromFirebase(item.item_name)

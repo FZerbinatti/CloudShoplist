@@ -56,5 +56,6 @@ fun SwipeBackground(dismissState: DismissState) {
             contentDescription = "Localized description",
             modifier = Modifier.scale(scale)
         )
+        //compre tutto -> fai che il background sia trasparente e si veda il fondo
     }
 }
