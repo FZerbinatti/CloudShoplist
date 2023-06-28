@@ -77,6 +77,7 @@ fun ShopListItemRow(
             checked = item.item_checked,
             onCheckedChange = {
                 val index = todoListState.value.indexOf(item)
+                viewModel.setcheckedFirebase(index, it)
                 viewModel.setChecked(index, it)
             }
         )

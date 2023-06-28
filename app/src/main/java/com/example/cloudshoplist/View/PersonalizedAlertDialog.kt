@@ -74,6 +74,7 @@ fun PersonalizedAlertDialog(closeRecord: () -> Unit, viewModel: MainViewModel) {
                     onClick = {
                         if (titleText != "") {
                             viewModel.addRecord(titleText, checkBoxStatus)
+                            viewModel.addFirebase(titleText, checkBoxStatus)
                             closeRecord.invoke()
                         }
                     },

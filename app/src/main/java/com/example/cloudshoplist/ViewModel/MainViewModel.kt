@@ -28,6 +28,8 @@ class MainViewModel(private val repository: IdRepository) : ViewModel() {
     val viewState: StateFlow<String> = _viewState
 
 
+
+
     init {
         Log.d(TAG, "INIT VIEWMODEL: ")
         repository.allIdItems().observeForever(Observer {it
@@ -92,44 +94,57 @@ class MainViewModel(private val repository: IdRepository) : ViewModel() {
     private val _shopListFlow = MutableStateFlow(shopList)
     val shopListFlow: StateFlow<List<ShopListItem>> get() = _shopListFlow
     fun setChecked(index: Int, value: Boolean) {
+
         shopList[index] = shopList[index].copy(item_checked = value)
-        val firebase = Firebase(_viewState.value)
-        firebase.checkItemFirebase(shopList[index])
+
+        shopList.add(ShopListItem(shopList[index].item_name.capitalize(), value))
+        shopList.remove(shopList[index])
 
         shopList.sortBy { it.item_checked }
-        //shopList.add(ShopListItem(shopList[index].item_name.capitalize(), value))
-        //shopList.remove(shopList[index])
-
-
 
 
     }
+
+
 
 
     public fun addRecord(titleText: String, checked: Boolean) {
         Log.d(TAG, "addRecord: "+titleText)
-        val firebase = Firebase(_viewState.value)
-        firebase.addValueFirebase(ShopListItem(titleText.capitalize(), checked))
 
-        /*if (shopList.isEmpty()) {
-            //shopList.add(ShopListItem(1, titleText.capitalize(), checked))
-            firebase.addValueFirebase(ShopListItem(titleText.capitalize(), checked))
+        if (shopList.isEmpty()) {
+            shopList.add(ShopListItem(titleText.capitalize(), checked))
         } else {
-            //shopList.add(ShopListItem(shopList.last().id + 1, titleText.capitalize(), checked))
-            firebase.addValueFirebase(ShopListItem(titleText.capitalize(), checked))
-        }*/
-        // add record on firebase
-        //firebase_shoplists_ids.
+            shopList.add(ShopListItem(titleText.capitalize(), checked))
+        }
     }
     fun removeRecord(item: ShopListItem) {
         Log.d(TAG, "removeRecord: "+item.item_name)
-        //val index = shopList.indexOf(item)
-        //shopList.remove(shopList[index])
-        // delete on firebase
-        val firebase = Firebase(_viewState.value)
-        firebase.deleteFromFirebase(item.item_name)
+        val index = shopList.indexOf(item)
+        shopList.remove(shopList[index])
+
 
     }
+
+    fun addFirebase(titleText: String, checked: Boolean){
+        Log.d(TAG, "addFirebase: ")
+        // add record on firebase
+        val firebase = Firebase(_viewState.value)
+        firebase.addValueFirebase(ShopListItem(titleText.capitalize(), checked))
+    }
+    fun removeFirebase(titleText: String){
+        Log.d(TAG, "removeFirebase: ")
+        // delete on firebase
+        val firebase = Firebase(_viewState.value)
+        firebase.deleteFromFirebase(titleText)
+    }
+
+    fun setcheckedFirebase(index: Int, value: Boolean){
+        Log.d(TAG, "setcheckedFirebase: "+shopList[index].item_name)
+        val firebase = Firebase(_viewState.value)
+        shopList[index].item_checked=value
+        firebase.checkItemFirebase(shopList[index])
+    }
+
     fun insert(item: IdItem) = GlobalScope.launch {
         Log.d(TAG, "insert: id: "+item.id+ " code: "+item.spesa_id)
         repository.insert(item)

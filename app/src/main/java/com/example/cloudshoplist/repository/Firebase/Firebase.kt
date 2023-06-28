@@ -9,6 +9,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import kotlin.math.log
 
 class Firebase(path_spesaID: String) {
 
@@ -70,6 +71,7 @@ class Firebase(path_spesaID: String) {
     }
 
     fun checkItemFirebase(shopListItem: ShopListItem) {
+        Log.d(TAG, "checkItemFirebase: "+firebase_shoplists_ids+"/"+shopListItem.item_name+"/item_checked = "+shopListItem.item_checked)
         firebase_shoplists_ids.child(shopListItem.item_name).child("item_checked").setValue(shopListItem.item_checked)
     }
 

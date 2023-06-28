@@ -2,7 +2,6 @@ package com.example.cloudshoplist.View
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.animation.core.animateFloatAsState
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -79,14 +78,18 @@ fun SpesaList(viewModel: MainViewModel) {
                             if (it == DismissValue.DismissedToStart) {
                                 Log.d("Main ", "SpesaList:  DismissValue.DismissedToStart")
                                 viewModel.removeRecord(currentItem)
+                                viewModel.removeFirebase(currentItem.item_name)
+
                                 true
 
                             } else if (it == DismissValue.DismissedToEnd) {
                                 //rimuovi item ma mettilo in coda come checked
                                 Log.d("Main ", "SpesaList:  DismissValue.DismissedToEnd")
-                                //viewModel.addRecord(currentItem.item_name, true)
-                                viewModel.setChecked(shopListState.value.indexOf(currentItem), true)
+                                viewModel.setcheckedFirebase(shopListState.value.indexOf(currentItem), true)
                                 //viewModel.removeRecord(currentItem)
+                                //viewModel.addRecord(currentItem.item_name, true)
+
+
                                 true
                             } else {
                                 false
@@ -96,14 +99,16 @@ fun SpesaList(viewModel: MainViewModel) {
 
                     if (dismissState.isDismissed(DismissDirection.EndToStart)) {
                         Log.d("Main ", "SpesaList: DismissDirection.EndToStart")
-
+                        viewModel.removeFirebase(currentItem.item_name)
                         viewModel.removeRecord(item)
                     } else if (dismissState.isDismissed(DismissDirection.StartToEnd)) {
                         //rimuovi item ma mettilo in coda come checked
                         Log.d("Main ", "SpesaList: DismissDirection.StartToEnd")
-                        viewModel.addRecord(currentItem.item_name, true)
-                        //viewModel.setChecked(shopListState.value.indexOf(currentItem), true)
-                        viewModel.removeRecord(item)
+                        viewModel.setcheckedFirebase(shopListState.value.indexOf(currentItem), true)
+                        //viewModel.removeRecord(item)
+                        //viewModel.addRecord(currentItem.item_name, true)
+
+
 
                     }
 
@@ -122,7 +127,7 @@ fun SpesaList(viewModel: MainViewModel) {
                             )
                         },
                         background = {
-                            SwipeBackground(dismissState)
+                            SwipeBackground(dismissState, item)
                         },
                         dismissContent = {
                             ShopListItemRow(item, shopListState, viewModel)
