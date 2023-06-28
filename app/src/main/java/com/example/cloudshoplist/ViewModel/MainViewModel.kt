@@ -80,6 +80,7 @@ class MainViewModel(private val repository: IdRepository) : ViewModel() {
                     }
                 }
                 shopList.sortBy { it.item_checked }
+
             }
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
