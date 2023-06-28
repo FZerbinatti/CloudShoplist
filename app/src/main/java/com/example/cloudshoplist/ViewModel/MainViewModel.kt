@@ -27,20 +27,29 @@ class MainViewModel(private val repository: IdRepository) : ViewModel() {
     private val _viewState = MutableStateFlow<String>(shoplist_ID)
     val viewState: StateFlow<String> = _viewState
 
-
-
+    private var shopList = mutableStateListOf<ShopListItem>()
+    private val _shopListFlow = MutableStateFlow(shopList)
+    val shopListFlow: StateFlow<List<ShopListItem>> get() = _shopListFlow
 
     init {
         Log.d(TAG, "INIT VIEWMODEL: ")
+        /*
+        repository.fun_first_time().observeForever({
+            //Log.d(TAG, ": "+it.get(0).)
+        })*/
+
+
         repository.allIdItems().observeForever(Observer {it
             idSize = it.size
             Log.d(TAG, "it? : " + idSize)
             //
             if (idSize==0){
+
                 shoplist_ID = getRandomString(10)
                 _viewState.value = shoplist_ID
                 insert(IdItem(shoplist_ID))
                 getShopListFromFirebase()
+                tutorial()
 
             }else{
                 //se il numero di item è 2, cancella il [0]
@@ -55,15 +64,25 @@ class MainViewModel(private val repository: IdRepository) : ViewModel() {
                 }
             }
         })
+    }
+
+    fun tutorial(){
+
+        addFirebase(" ↗ Click sull'icona ❏ per copiare il codice ID e invialo a qualcuno ↗ ", false)
+        addFirebase(" ↑ clicca sul codice ID per poterne inserire uno nuovo ↑ ", false)
+        addFirebase(" ⇢ scorri a destra per marcare ⇢ ", false)
+        addFirebase(" ⇠ scorri a sinistra per cancellare ⇠ ", false)
+        addFirebase("☐ clicca sul quadratino per sbarrare ☑ ", false)
+
+
+
+
 
 
     }
 
     private fun getShopListFromFirebase() {
 
-
-        Log.d(TAG, "getShopListFromFirebase: if a1a2a3 ur fucked: "+_viewState.value)
-        Log.d(TAG, "getShopListFromFirebase: size: "+shopList.size)
         val database = com.google.firebase.ktx.Firebase.database("https://sharedshoplist-17901-default-rtdb.europe-west1.firebasedatabase.app/")
         //var index=0
         val firebase_shoplists_ids = database.getReference("shoplists_ids").child(_viewState.value)
@@ -74,9 +93,7 @@ class MainViewModel(private val repository: IdRepository) : ViewModel() {
                     //index++
                     val item = DataSnap.getValue(ShopListItem::class.java)
                     if (item != null) {
-                        Log.d(TAG, "onDataChange: item: " + item.item_name)
                         shopList.add(ShopListItem(item.item_name, item.item_checked))
-
                     }
                 }
                 shopList.sortBy { it.item_checked }
@@ -89,18 +106,11 @@ class MainViewModel(private val repository: IdRepository) : ViewModel() {
     }
 
 
-    private var shopList = mutableStateListOf<ShopListItem>()
 
-
-    private val _shopListFlow = MutableStateFlow(shopList)
-    val shopListFlow: StateFlow<List<ShopListItem>> get() = _shopListFlow
     fun setChecked(index: Int, value: Boolean) {
-
         shopList[index] = shopList[index].copy(item_checked = value)
-
         shopList.add(ShopListItem(shopList[index].item_name.capitalize(), value))
         shopList.remove(shopList[index])
-
         shopList.sortBy { it.item_checked }
 
 
@@ -111,7 +121,6 @@ class MainViewModel(private val repository: IdRepository) : ViewModel() {
 
     public fun addRecord(titleText: String, checked: Boolean) {
         Log.d(TAG, "addRecord: "+titleText)
-
         if (shopList.isEmpty()) {
             shopList.add(ShopListItem(titleText.capitalize(), checked))
         } else {
