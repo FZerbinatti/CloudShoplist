@@ -48,7 +48,6 @@ fun SpesaList(viewModel: MainViewModel) {
     Column(
         modifier = Modifier
             .padding(horizontal = 10.dp, vertical = 10.dp)
-
             .fillMaxWidth()
             .fillMaxHeight()
             .border(
@@ -82,7 +81,7 @@ fun SpesaList(viewModel: MainViewModel) {
 
                                 true
 
-                            } else if (it == DismissValue.DismissedToEnd) {
+                            }/* else if (it == DismissValue.DismissedToEnd) {
                                 //rimuovi item ma mettilo in coda come checked
                                 Log.d("Main ", "SpesaList:  DismissValue.DismissedToEnd")
                                 viewModel.setcheckedFirebase(shopListState.value.indexOf(currentItem), true)
@@ -91,7 +90,7 @@ fun SpesaList(viewModel: MainViewModel) {
 
 
                                 true
-                            } else {
+                            }*/ else {
                                 false
                             }
                         }
@@ -101,7 +100,7 @@ fun SpesaList(viewModel: MainViewModel) {
                         Log.d("Main ", "SpesaList: DismissDirection.EndToStart")
                         viewModel.removeFirebase(currentItem.item_name)
                         viewModel.removeRecord(item)
-                    } else if (dismissState.isDismissed(DismissDirection.StartToEnd)) {
+                    }/* else if (dismissState.isDismissed(DismissDirection.StartToEnd)) {
                         //rimuovi item ma mettilo in coda come checked
                         Log.d("Main ", "SpesaList: DismissDirection.StartToEnd")
                         viewModel.setcheckedFirebase(shopListState.value.indexOf(currentItem), true)
@@ -110,7 +109,7 @@ fun SpesaList(viewModel: MainViewModel) {
 
 
 
-                    }
+                    }*/
 
                     SwipeToDismiss(
                         state = dismissState,
@@ -118,7 +117,7 @@ fun SpesaList(viewModel: MainViewModel) {
                             .padding(vertical = 1.dp)
                             .animateItemPlacement(),
                         directions = setOf(
-                            DismissDirection.StartToEnd,
+                            //DismissDirection.StartToEnd,
                             DismissDirection.EndToStart
                         ),
                         dismissThresholds = { direction ->

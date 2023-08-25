@@ -1,8 +1,12 @@
 package com.example.cloudshoplist.View
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
@@ -12,9 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.dreamsphere.CloudShoplist.R
+import com.example.cloudshoplist.InputValidator
 import com.example.cloudshoplist.ViewModel.MainViewModel
 import kotlinx.coroutines.android.awaitFrame
 
@@ -22,7 +30,10 @@ import kotlinx.coroutines.android.awaitFrame
 fun PersonalizedAlertDialog(closeRecord: () -> Unit, viewModel: MainViewModel) {
 
 
+
     val focusRequester = remember { FocusRequester() }
+    val tile_box = remember { mutableStateOf("item") }
+    val context = LocalContext.current
 
     LaunchedEffect(focusRequester) {
         awaitFrame()
@@ -43,10 +54,14 @@ fun PersonalizedAlertDialog(closeRecord: () -> Unit, viewModel: MainViewModel) {
             var checkBoxStatus by rememberSaveable { mutableStateOf(false) }
             TextField(
                 modifier = Modifier.focusRequester(focusRequester),
-                value = titleText,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                textStyle = TextStyle(color = Color.Black),
+                        value = titleText,
                 onValueChange = { titleText = it.replaceFirstChar { it.uppercase() } },
-                label = { Text("Item") }
-            )
+                label = { tile_box },
+
+
+                )
             /*Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(text = "Urgency:")
                 Checkbox(
@@ -72,10 +87,17 @@ fun PersonalizedAlertDialog(closeRecord: () -> Unit, viewModel: MainViewModel) {
 
 
                     onClick = {
-                        if (titleText != "") {
+                        //val blockedChars: String = "~#^|\$%&*!./"
+                        titleText = titleText.replace(".", " ").replace(",", " ")
+                        Log.d(" Main TAG", "PersonalizedAlertDialog: input validator: "+InputValidator.validateInput(titleText))
+                        if(InputValidator.validateInput(titleText)){
+                            Log.d("Main Personalized Alert Dialog", "PersonalizedAlertDialog: adding text: "+titleText)
                             viewModel.addRecord(titleText, checkBoxStatus)
                             viewModel.addFirebase(titleText, checkBoxStatus)
                             closeRecord.invoke()
+                        }else{
+                            tile_box.value ="Non sono ammessi caratteri speciali"
+                            Toast.makeText(context, context.getString(R.string.INVALID_INPUT), Toast.LENGTH_LONG).show()
                         }
                     },
 

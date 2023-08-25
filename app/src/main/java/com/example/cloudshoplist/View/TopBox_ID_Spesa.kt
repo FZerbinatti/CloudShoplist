@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import com.dreamsphere.CloudShoplist.R
 import com.dreamsphere.sharedshoplistk.repository.Room.IdItem
+import com.example.cloudshoplist.InputValidator
 import com.example.cloudshoplist.ViewModel.MainViewModel
 
 @Composable
@@ -77,15 +78,12 @@ fun TopBox_ID_Spesa(viewModel: MainViewModel) {
             //on confirm, se il textbox non è vuoto, compialo nella casella
             confirmButton = {
                 Button(onClick = {
-
-                    if (!alertPastedIdSpesa.value.isEmpty()) {
+                    if (alertPastedIdSpesa.value.isEmpty()||!InputValidator.validateInput((alertPastedIdSpesa.value))) {
+                        Toast.makeText(context, context.getString(R.string.EMPTY_ID), Toast.LENGTH_LONG).show()
+                    } else {
                         var spesa_ID = alertPastedIdSpesa.value
                         viewModel.insert(IdItem(spesa_ID,0))
                         showDialog.value = false
-
-
-                    } else {
-                        Toast.makeText(context, context.getString(R.string.EMPTY_ID), Toast.LENGTH_LONG).show()
                     }
 
                 }) {

@@ -43,7 +43,7 @@ fun SwipeBackground(dismissState: DismissState, item: ShopListItem) {
     val color by animateColorAsState(
         when (dismissState.targetValue) {
             DismissValue.Default -> Color.LightGray
-            DismissValue.DismissedToEnd -> colorResource(id = R.color.swipe_bacgkorund_yellow)
+            DismissValue.DismissedToEnd -> colorResource(id = R.color.swipe_bacgkorund_trasp)
             DismissValue.DismissedToStart -> colorResource(id = R.color.swipe_bacgkorund_red)
         }
     )

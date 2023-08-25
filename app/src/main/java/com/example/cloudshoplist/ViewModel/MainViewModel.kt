@@ -22,8 +22,8 @@ class MainViewModel(private val repository: IdRepository) : ViewModel() {
     private val TAG = "MainViewModel"
 
     var idSize: Int? = null
-    var shoplist_ID = "a1a2a3"
 
+    var shoplist_ID = "a1a2a3"
     private val _viewState = MutableStateFlow<String>(shoplist_ID)
     val viewState: StateFlow<String> = _viewState
 
@@ -70,14 +70,8 @@ class MainViewModel(private val repository: IdRepository) : ViewModel() {
 
         addFirebase(" ↗ Click sull'icona ❏ per copiare il codice ID e invialo a qualcuno ↗ ", false)
         addFirebase(" ↑ clicca sul codice ID per poterne inserire uno nuovo ↑ ", false)
-        addFirebase(" ⇢ scorri a destra per marcare ⇢ ", false)
         addFirebase(" ⇠ scorri a sinistra per cancellare ⇠ ", false)
         addFirebase("☐ clicca sul quadratino per sbarrare ☑ ", false)
-
-
-
-
-
 
     }
 
