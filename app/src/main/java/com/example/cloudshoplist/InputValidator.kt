@@ -10,7 +10,7 @@ object InputValidator {
     private const val TAG = "Main InputValidator"
     fun validateInput(item: String): Boolean{
 
-        val special: Pattern = Pattern.compile("[!@#$%.&*()_+=|<>?{}\\[\\]~-]")
+        val special: Pattern = Pattern.compile("[!@#$%.&/*()_+=|<>?{}\\[\\]~-]")
         val hasSpecial = special.matcher(item).find()
         Log.d(TAG, "validateInput: "+item +" - has special:" + hasSpecial)
 
